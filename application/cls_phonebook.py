@@ -6,19 +6,19 @@ PHONE_SUB_PATTERN = r'+7(\2)-\3-\4-\5 \6\7'
 
 class PhoneBook:
     def __init__(self, raw_data_path):
-        raw_contact_list = self.__get_raw(raw_data_path)
-        contact_list_with_doubles = self.__process_raw_data(raw_contact_list)
-        self.pure_contact_list = self.__make_pure_contact_list(contact_list_with_doubles)
+        raw_contact_list = self._get_raw(raw_data_path)
+        contact_list_with_doubles = self._process_raw_data(raw_contact_list)
+        self.pure_contact_list = self._make_pure_contact_list(contact_list_with_doubles)
 
     @staticmethod
-    def __get_raw(data):
+    def _get_raw(data):
         with open(data, encoding='utf-8') as file:
             rows = csv.reader(file, delimiter=",")
             result = list(rows)
         return result
 
     @staticmethod
-    def __process_raw_data(data):
+    def _process_raw_data(data):
         result = list()
         for row in data:
             record = list()
@@ -32,15 +32,15 @@ class PhoneBook:
             result.append(record)
         return result
 
-    def __make_pure_contact_list(self, data):
+    def _make_pure_contact_list(self, data):
         result = dict()
         for item in data:
-            result[item[0]] = self.__merge_doubles(item, result[item[0]]) if item[0] in result else item
+            result[item[0]] = self._merge_doubles(item, result[item[0]]) if item[0] in result else item
         return result.values()
 
     @staticmethod
-    def __merge_doubles(record_one, record_two):
-        result = []
+    def _merge_doubles(record_one, record_two):
+        result = list()
         for index in range(len(record_one)):
             result.append(record_one[index]) if record_one[index] else result.append(record_two[index])
         return result
